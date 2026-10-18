@@ -21,7 +21,7 @@
 - 初回のモデル取得にインターネット接続と、数GBの空き容量
 - 音声入力を使う場合はマイク
 
-パッケージ: `Microsoft.AI.Foundry.Local` 1.2.4
+パッケージ: `Microsoft.AI.Foundry.Local` 2.1.0（要約・文字起こしは `GetChatClientAsync`／`GetAudioClientAsync` を使うため、ビルド時に CS0618 の警告が2件出ます）
 
 ## 起動
 

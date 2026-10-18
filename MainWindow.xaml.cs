@@ -151,6 +151,8 @@ public sealed partial class MainWindow : Window
 
     private async Task StartRecordingAsync()
     {
+        // マイクの準備が終わるまでは、もう一度押せないようにする
+        RecordButton.IsEnabled = false;
         try
         {
             _capture = new MediaCapture();
