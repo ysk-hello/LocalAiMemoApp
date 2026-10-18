@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AppTitle" xml:space="preserve"><value>ローカルAIメモ</value></data>
+  <data name="AppTitleText.Text" xml:space="preserve"><value>ローカルAIメモ</value></data>
+  <data name="NewButton.Content" xml:space="preserve"><value>新しいメモ</value></data>
+  <data name="PrepareButton.Content" xml:space="preserve"><value>AIを準備する</value></data>
+  <data name="PrepareNote.Text" xml:space="preserve"><value>初回は文章用と音声用のモデルを取得します。インターネット接続と、数GBの空き容量が必要です。2回目からは保存済みのモデルを使います。</value></data>
+  <data name="CategoryFilterBox.Header" xml:space="preserve"><value>分類で絞り込む</value></data>
+  <data name="TagFilterBox.Header" xml:space="preserve"><value>タグで絞り込む</value></data>
+  <data name="TagFilterBox.PlaceholderText" xml:space="preserve"><value>例：#見積もり</value></data>
+  <data name="ModelFolderButton.Content" xml:space="preserve"><value>モデルの保存先を開く</value></data>
+  <data name="DataFolderButton.Content" xml:space="preserve"><value>メモの保存先を開く</value></data>
+  <data name="MemoHeading.Text" xml:space="preserve"><value>メモ</value></data>
+  <data name="BodyBox.Header" xml:space="preserve"><value>本文</value></data>
+  <data name="BodyBox.PlaceholderText" xml:space="preserve"><value>ここにメモを入力するか、「録音開始」で話してください。</value></data>
+  <data name="SummarizeButton.Content" xml:space="preserve"><value>要約する</value></data>
+  <data name="TagButton.Content" xml:space="preserve"><value>タグと分類を提案する</value></data>
+  <data name="SaveButton.Content" xml:space="preserve"><value>保存する</value></data>
+  <data name="SummaryBox.Header" xml:space="preserve"><value>要約（候補）</value></data>
+  <data name="TagsBox.Header" xml:space="preserve"><value>タグ（候補）</value></data>
+  <data name="TagsBox.PlaceholderText" xml:space="preserve"><value>#予定 #学習</value></data>
+  <data name="CategoryBox.Header" xml:space="preserve"><value>分類</value></data>
+  <data name="PrivacyInfo.Title" xml:space="preserve"><value>このPCの中で処理します</value></data>
+  <data name="PrivacyInfo.Message" xml:space="preserve"><value>AIの返事は候補です。日付・数字・名前は元の文章と比べてから保存してください。</value></data>
+  <data name="Filter_All" xml:space="preserve"><value>すべて</value></data>
+  <data name="Category_None" xml:space="preserve"><value>未分類</value></data>
+  <data name="Category_Work" xml:space="preserve"><value>仕事</value></data>
+  <data name="Category_Personal" xml:space="preserve"><value>個人</value></data>
+  <data name="Category_Idea" xml:space="preserve"><value>アイデア</value></data>
+  <data name="Category_Learning" xml:space="preserve"><value>学習</value></data>
+  <data name="Record_Start" xml:space="preserve"><value>録音開始</value></data>
+  <data name="Record_Stop" xml:space="preserve"><value>停止して文字にする</value></data>
+  <data name="Status_Welcome" xml:space="preserve"><value>メモを手入力できます。AIを使うときは「AIを準備する」を押してください。</value></data>
+  <data name="Status_Preparing" xml:space="preserve"><value>準備中です。初回は時間がかかります。</value></data>
+  <data name="Status_Ready" xml:space="preserve"><value>AIの準備ができました。</value></data>
+  <data name="Status_Summarizing" xml:space="preserve"><value>要約しています…</value></data>
+  <data name="Status_Summarized" xml:space="preserve"><value>要約の候補を作りました。内容を確かめてください。</value></data>
+  <data name="Status_Tagging" xml:space="preserve"><value>タグと分類を考えています…</value></data>
+  <data name="Status_Tagged" xml:space="preserve"><value>タグと分類の候補を作りました。必要なら直してください。</value></data>
+  <data name="Status_Recording" xml:space="preserve"><value>録音中です。話し終えたら「停止して文字にする」を押してください。</value></data>
+  <data name="Status_Transcribing" xml:space="preserve"><value>文字にしています…</value></data>
+  <data name="Status_Transcribed" xml:space="preserve"><value>文字にした内容を本文の最後に追加しました。間違いがあれば直してください。</value></data>
+  <data name="Status_Saved" xml:space="preserve"><value>保存しました。</value></data>
+  <data name="Status_New" xml:space="preserve"><value>新しいメモを入力できます。</value></data>
+  <data name="Status_Closing" xml:space="preserve"><value>終了しています…</value></data>
+  <data name="Error_EmptyBody" xml:space="preserve"><value>本文が空です。先にメモを入力してください。</value></data>
+  <data name="Error_Microphone" xml:space="preserve"><value>マイクを使えませんでした。Windowsの設定でマイクの使用を許可するか、手入力で続けてください。</value></data>
+  <data name="Error_Save" xml:space="preserve"><value>保存できませんでした。もう一度試してください。</value></data>
+  <data name="Error_Load" xml:space="preserve"><value>保存済みのメモを読み込めませんでした。</value></data>
+  <data name="Error_FolderNotFound" xml:space="preserve"><value>保存先がまだありません。</value></data>
+  <data name="Error_TryAgain" xml:space="preserve"><value>うまくいきませんでした。もう一度試してください。</value></data>
+  <data name="Error_Prepare" xml:space="preserve"><value>AIを準備できませんでした。インターネット接続と空き容量を確かめて、もう一度試してください。</value></data>
+  <data name="Error_ModelNotFound" xml:space="preserve"><value>AIのモデルが見つかりませんでした。インターネット接続を確かめて、もう一度試してください。</value></data>
+  <data name="Error_EmptyTranscription" xml:space="preserve"><value>声を聞き取れませんでした。マイクに向かって数秒話してから、もう一度試してください。</value></data>
+  <data name="Error_EmptyAnswer" xml:space="preserve"><value>AIから返事がありませんでした。もう一度試してください。</value></data>
+  <data name="Error_NotReady" xml:space="preserve"><value>先に「AIを準備する」を押してください。</value></data>
+  <data name="Error_BodyTooLong" xml:space="preserve"><value>本文が長すぎます。4,000文字以内に短くしてから試してください。</value></data>
+  <data name="Elapsed_Format" xml:space="preserve"><value>処理時間：{0:F1} 秒</value></data>
+  <data name="AiButtonsNote.Text" xml:space="preserve"><value>「録音開始」「要約する」「タグと分類を提案する」は、左上の「AIを準備する」を押すと使えるようになります。手入力と保存は、準備しなくても使えます。</value></data>
+</root>

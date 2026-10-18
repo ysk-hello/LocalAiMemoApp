@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "LocalAiMemoApp (Package)": {
+      "commandName": "MsixPackage"
+    }
+  }
+}
