@@ -4,7 +4,7 @@ using Windows.Storage;
 namespace LocalAiMemoApp;
 
 /// <summary>
-/// メモをPC内のJSONファイル（memos.json）に保存・読み込みする係。
+/// The helper that saves and loads memos to and from a JSON file (memos.json) on this PC.
 /// </summary>
 public static class MemoStore
 {
@@ -21,7 +21,7 @@ public static class MemoStore
         }
         catch (FileNotFoundException)
         {
-            // まだ一度も保存していない
+            // Nothing has been saved yet
             return [];
         }
     }

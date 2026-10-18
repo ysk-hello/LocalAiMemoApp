@@ -5,9 +5,9 @@ using Microsoft.Extensions.Logging.Abstractions;
 namespace LocalAiMemoApp;
 
 /// <summary>
-/// Foundry Local を使って、文字起こしと文章整理を行う係。
-/// 役割は「初期化」「モデル準備」「文字起こし」「文章整理」「解放」の5つ。
-/// 画面（WinUI）の部品には触らない。
+/// The helper that uses Foundry Local to transcribe speech and organize text.
+/// It has five jobs: initialize, prepare models, transcribe, organize text, and release.
+/// It never touches the UI (WinUI) controls.
 /// </summary>
 public sealed class LocalAiService : IAsyncDisposable
 {
@@ -15,7 +15,7 @@ public sealed class LocalAiService : IAsyncDisposable
     public const string AudioModelAlias = "whisper-medium";
     public const int MaxBodyLength = 4000;
 
-    // AI への依頼を1つずつ順番に処理するための「入口の鍵」。
+    // A "gate" so that requests to the AI are handled one at a time.
     private readonly SemaphoreSlim _gate = new(1, 1);
     private FoundryLocalManager? _manager;
     private IModel? _textModel;
@@ -23,7 +23,7 @@ public sealed class LocalAiService : IAsyncDisposable
 
     public bool IsReady { get; private set; }
 
-    // ① 初期化 と ② モデル準備：初回はダウンロードし、2回目以降は保存済みのモデルを読み込む。
+    // (1) Initialize and (2) prepare models: download them the first time, then load the saved models.
     public async Task PrepareAsync(IProgress<double> progress)
     {
         await _gate.WaitAsync();
@@ -31,7 +31,7 @@ public sealed class LocalAiService : IAsyncDisposable
         {
             if (IsReady) return;
 
-            // 準備の処理は重いので、画面を固めないよう別のスレッドで動かす。
+            // Preparing is heavy, so run it on another thread to keep the UI responsive.
             await Task.Run(async () =>
             {
                 if (_manager is null)
@@ -47,7 +47,7 @@ public sealed class LocalAiService : IAsyncDisposable
                 _audioModel = await catalog.GetModelAsync(AudioModelAlias)
                     ?? throw new LocalAiException("Error_ModelNotFound");
 
-                // 2つのモデルを順に取得する。進み具合は 0〜100 にまとめて知らせる。
+                // Get the two models in turn. Progress is reported as a single 0-100 value.
                 await DownloadIfNeededAsync(_audioModel, value => progress.Report(value * 0.2));
                 await DownloadIfNeededAsync(_textModel, value => progress.Report(20 + value * 0.8));
 
@@ -72,7 +72,7 @@ public sealed class LocalAiService : IAsyncDisposable
         await model.DownloadAsync(onProgress);
     }
 
-    // ③ 文字起こし：音声ファイルを渡し、文字にして返す。
+    // (3) Transcribe: pass an audio file and return the text.
     public async Task<string> TranscribeAsync(string audioFilePath, CancellationToken ct)
     {
         await _gate.WaitAsync(ct);
@@ -82,7 +82,7 @@ public sealed class LocalAiService : IAsyncDisposable
             return await Task.Run(async () =>
             {
                 var client = await audioModel.GetAudioClientAsync(ct);
-                client.Settings.Language = "ja";
+                client.Settings.Language = "en";
                 client.Settings.Temperature = 0f;
                 var response = await client.TranscribeAudioAsync(audioFilePath, ct);
                 var text = response.Text?.Trim();
@@ -97,7 +97,7 @@ public sealed class LocalAiService : IAsyncDisposable
         }
     }
 
-    // ④ 文章整理：AIへのお願い（instruction）と本文を渡し、返事を受け取る。
+    // (4) Organize text: pass the request (instruction) and the memo text, and get the answer.
     public async Task<string> AskAsync(string instruction, string body, CancellationToken ct)
     {
         if (body.Length > MaxBodyLength) throw new LocalAiException("Error_BodyTooLong");
@@ -112,7 +112,7 @@ public sealed class LocalAiService : IAsyncDisposable
                 client.Settings.Temperature = 0.1f;
                 client.Settings.MaxTokens = 256;
 
-                // 毎回新しいメッセージを作る。前のメモの内容を会話として覚えることはない。
+                // Create new messages every time. The AI does not remember earlier memos as a conversation.
                 List<ChatMessage> messages =
                 [
                     new ChatMessage { Role = "system", Content = instruction },
@@ -134,7 +134,7 @@ public sealed class LocalAiService : IAsyncDisposable
     private IModel GetReadyModel(IModel? model) =>
         IsReady && model is not null ? model : throw new LocalAiException("Error_NotReady");
 
-    // ⑤ 解放：実行中の処理が終わるのを待ってから、モデルとFoundry Localを片付ける。
+    // (5) Release: wait for running work to finish, then clean up the models and Foundry Local.
     public async ValueTask DisposeAsync()
     {
         await _gate.WaitAsync();
@@ -159,7 +159,7 @@ public sealed class LocalAiService : IAsyncDisposable
 }
 
 /// <summary>
-/// 画面に出すメッセージを、リソース（.resw）のキーで持つ例外。
+/// An exception that carries the resource (.resw) key of the message to show on screen.
 /// </summary>
 public sealed class LocalAiException(string messageKey) : Exception(messageKey)
 {

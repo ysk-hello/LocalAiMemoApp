@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 namespace LocalAiMemoApp;
 
 /// <summary>
-/// 1件のメモ。JSONファイルに保存する項目を持つ。
+/// One memo. Holds the fields saved to the JSON file.
 /// </summary>
 public sealed class MemoItem
 {
@@ -15,7 +15,7 @@ public sealed class MemoItem
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
     public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.Now;
 
-    // 一覧に表示する文字（保存はしない）
+    // Text shown in the list (not saved)
     [JsonIgnore]
     public string Title => Body.Split(['\r', '\n']).FirstOrDefault(line => line.Trim().Length > 0)?.Trim() ?? string.Empty;
 

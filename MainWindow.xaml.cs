@@ -20,17 +20,17 @@ public sealed partial class MainWindow : Window
     private readonly List<MemoItem> _allMemos = [];
     private readonly ObservableCollection<MemoItem> _visibleMemos = [];
 
-    // 編集中のメモ（新しいメモのときは null）。一覧の選択とは別に覚えておく
+    // The memo being edited (null for a new memo). Kept separately from the list selection
     private MemoItem? _editingMemo;
 
-    // 実行中のAI処理と、それを止めるための仕組み
+    // The running AI task and the way to stop it
     private Task? _runningTask;
     private CancellationTokenSource? _cancel;
     private bool _isPreparing;
     private bool _isClosing;
     private bool _canClose;
 
-    // 録音
+    // Recording
     private MediaCapture? _capture;
     private StorageFile? _recordingFile;
 
@@ -61,7 +61,7 @@ public sealed partial class MainWindow : Window
         _ = LoadMemosAsync();
     }
 
-    // ---- AIの準備 ----
+    // ---- Prepare AI ----
 
     private async void Prepare_Click(object sender, RoutedEventArgs e)
     {
@@ -82,19 +82,19 @@ public sealed partial class MainWindow : Window
         UpdateButtons();
     }
 
-    // ---- 要約・タグと分類 ----
+    // ---- Summary, tags, and category ----
 
     private async void Summarize_Click(object sender, RoutedEventArgs e)
     {
         if (!CanAsk()) return;
-        // ① 本文を読む
+        // (1) Read the memo text
         var body = BodyBox.Text.Trim();
 
         await RunAsync("Status_Summarizing", async ct =>
         {
-            // ② AIへ渡す
+            // (2) Pass it to the AI
             var summary = await _ai.AskAsync(AiPrompts.Summarize, body, ct);
-            // ③ 候補を表示する
+            // (3) Show the suggestion
             SummaryBox.Text = summary;
             ShowStatus("Status_Summarized");
         });
@@ -115,27 +115,27 @@ public sealed partial class MainWindow : Window
         });
     }
 
-    // 返事の1行目からタグ（#で始まる語を最大3個）、「分類:」の行から分類を読み取る。
+    // Read the tags (up to 3 words starting with #) from the first line, and the category from the "Category:" line.
     private static (string Tags, string Category) ReadTagsAndCategory(string answer)
     {
-        var lines = answer.Replace('：', ':')
+        var lines = answer
             .Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-        // 区切りが空白でも「、」でも読めるようにし、# を付けそろえる
+        // Accept spaces or commas between tags, and make sure every tag starts with #
         var tagWords = lines.FirstOrDefault(line => line.Contains('#'))?
-            .Split([' ', '　', ',', '、'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Split([' ', ','], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .Select(word => "#" + word.TrimStart('#'))
             .Where(word => word.Length > 1)
             .Distinct()
             .Take(3) ?? [];
 
-        var categoryLine = lines.FirstOrDefault(line => line.StartsWith(AiPrompts.CategoryPrefix));
+        var categoryLine = lines.FirstOrDefault(line => line.StartsWith(AiPrompts.CategoryPrefix, StringComparison.OrdinalIgnoreCase));
         var category = Categories.FromDisplayName(categoryLine?[AiPrompts.CategoryPrefix.Length..]);
 
         return (string.Join(" ", tagWords), category);
     }
 
-    // ---- 録音と文字起こし ----
+    // ---- Recording and transcription ----
 
     private async void Record_Click(object sender, RoutedEventArgs e)
     {
@@ -151,7 +151,7 @@ public sealed partial class MainWindow : Window
 
     private async Task StartRecordingAsync()
     {
-        // マイクの準備が終わるまでは、もう一度押せないようにする
+        // Disable the button until the microphone is ready
         RecordButton.IsEnabled = false;
         try
         {
@@ -161,7 +161,7 @@ public sealed partial class MainWindow : Window
                 StreamingCaptureMode = StreamingCaptureMode.Audio
             });
 
-            // 16kHz・モノラルのWAV形式で録音する（音声モデルが扱いやすい形式）
+            // Record as 16 kHz mono WAV (a format the speech model handles well)
             var profile = MediaEncodingProfile.CreateWav(AudioEncodingQuality.Low);
             profile.Audio = AudioEncodingProperties.CreatePcm(16000, 1, 16);
             _recordingFile = await ApplicationData.Current.TemporaryFolder.CreateFileAsync(
@@ -173,7 +173,7 @@ public sealed partial class MainWindow : Window
         }
         catch (Exception)
         {
-            // マイクが無い・使用が許可されていない場合。手入力は続けられる。
+            // No microphone, or access is not allowed. The user can still type.
             ReleaseCapture();
             ShowStatus("Error_Microphone");
         }
@@ -192,21 +192,21 @@ public sealed partial class MainWindow : Window
             ReleaseCapture();
         }
 
-        // ほとんど無音の録音を渡すと、音声モデルが無関係な文を作ることがあるため、先に確かめる
+        // A nearly silent recording can make the speech model invent unrelated text, so check it first
         if (await IsTooQuietAsync(file)) throw new LocalAiException("Error_EmptyTranscription");
 
         var text = await _ai.TranscribeAsync(file.Path, ct);
-        // 文字起こしの結果は、本文の末尾に追加する（上書きしない）
+        // Append the transcript to the end of the memo (never overwrite it)
         BodyBox.Text = string.IsNullOrWhiteSpace(BodyBox.Text) ? text : $"{BodyBox.Text.TrimEnd()}\r{text}";
         ShowStatus("Status_Transcribed");
     }
 
-    // 録音が1秒未満、または一番大きな音でも小さすぎるときは「聞き取れなかった」とみなす。
-    // 16kHz・16ビット・モノラルなので、1秒は32,000バイト。
+    // Treat the recording as "could not hear" if it is shorter than 1 second or even its loudest sound is too quiet.
+    // At 16 kHz, 16-bit, mono, one second is 32,000 bytes.
     private static async Task<bool> IsTooQuietAsync(StorageFile file)
     {
         var bytes = await File.ReadAllBytesAsync(file.Path);
-        // 音の中身は "data" という目印の8バイト後から始まる
+        // The audio samples start 8 bytes after the "data" marker
         var dataStart = bytes.AsSpan(0, Math.Min(bytes.Length, 256)).IndexOf("data"u8) + 8;
         if (dataStart < 8 || bytes.Length - dataStart < 32000) return true;
 
@@ -215,7 +215,8 @@ public sealed partial class MainWindow : Window
         {
             peak = Math.Max(peak, Math.Abs((int)BitConverter.ToInt16(bytes, i)));
         }
-        return peak < 1000; // 最大値 32,767 のうち、ごく小さな音しかない
+        // Only very quiet sound (the maximum is 32,767)
+        return peak < 1000;
     }
 
     private void ReleaseCapture()
@@ -226,7 +227,7 @@ public sealed partial class MainWindow : Window
         RecordButton.Content = Strings.GetString("Record_Start");
     }
 
-    // ---- 保存・一覧・絞り込み ----
+    // ---- Save, list, and filters ----
 
     private async void Save_Click(object sender, RoutedEventArgs e)
     {
@@ -267,7 +268,7 @@ public sealed partial class MainWindow : Window
         {
             foreach (var memo in await MemoStore.LoadAsync())
             {
-                // 以前の版で日本語のまま保存した分類も読めるようにする
+                // Also read categories that an older version saved as display names
                 if (!Categories.All.Contains(memo.Category))
                 {
                     memo.Category = Categories.FromDisplayName(memo.Category);
@@ -284,10 +285,11 @@ public sealed partial class MainWindow : Window
 
     private void Filter_Changed(object sender, object e) => ApplyFilter(_editingMemo);
 
-    // 分類とタグの条件に合うメモだけを一覧に並べる（AIは使わない）
+    // Show only the memos that match the category and tag filters (no AI involved)
     private void ApplyFilter(MemoItem? selected)
     {
-        var categoryIndex = CategoryFilterBox.SelectedIndex - 1; // 0番目は「すべて」
+        // Item 0 is "All"
+        var categoryIndex = CategoryFilterBox.SelectedIndex - 1;
         var tag = TagFilterBox.Text.Trim().TrimStart('#');
 
         var matches = _allMemos.Where(memo =>
@@ -319,7 +321,7 @@ public sealed partial class MainWindow : Window
         BodyBox.Focus(FocusState.Programmatic);
     }
 
-    // ---- 保存先を開く ----
+    // ---- Open folders ----
 
     private void OpenModelFolder_Click(object sender, RoutedEventArgs e) =>
         OpenFolder(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".LocalAiMemoApp"));
@@ -337,7 +339,7 @@ public sealed partial class MainWindow : Window
         Process.Start(new ProcessStartInfo("explorer.exe", $"\"{path}\"") { UseShellExecute = true });
     }
 
-    // ---- 共通：実行中の表示・ボタンの切り替え・エラー表示 ----
+    // ---- Shared: busy state, buttons, and error messages ----
 
     private bool CanAsk()
     {
@@ -349,7 +351,7 @@ public sealed partial class MainWindow : Window
         return true;
     }
 
-    // AIの処理を1つ実行する。実行中はボタンを押せなくし、失敗したら短いメッセージを出す。
+    // Run one AI task. Disable the buttons while it runs, and show a short message if it fails.
     private async Task RunAsync(string statusKey, Func<CancellationToken, Task> action)
     {
         _cancel = new CancellationTokenSource();
@@ -364,7 +366,7 @@ public sealed partial class MainWindow : Window
         }
         catch (OperationCanceledException)
         {
-            // 閉じる操作で止めた場合は何も表示しない
+            // Stopped because the window is closing: show nothing
         }
         catch (LocalAiException ex)
         {
@@ -376,7 +378,7 @@ public sealed partial class MainWindow : Window
         }
         finally
         {
-            // かかった時間を表示する（第7章でモデルを比べるときに使う）
+            // Show how long it took (used to compare models in Chapter 7)
             ElapsedLabel.Text = string.Format(Strings.GetString("Elapsed_Format"), stopwatch.Elapsed.TotalSeconds);
             _runningTask = null;
             _cancel.Dispose();
@@ -401,7 +403,7 @@ public sealed partial class MainWindow : Window
 
     private void ShowStatus(string key) => StatusLabel.Text = Strings.GetString(key);
 
-    // ---- 閉じる時の後片付け ----
+    // ---- Clean up when closing ----
 
     private async void Window_Closing(AppWindow sender, AppWindowClosingEventArgs args)
     {
@@ -412,7 +414,7 @@ public sealed partial class MainWindow : Window
         UpdateButtons();
         ShowStatus("Status_Closing");
 
-        // 実行中の文字起こし・要約を止め、終わるのを待ってからモデルを解放する
+        // Stop any running transcription or summary, wait for it to finish, then release the models
         _cancel?.Cancel();
         ReleaseCapture();
         if (!_isPreparing)
@@ -423,7 +425,7 @@ public sealed partial class MainWindow : Window
             }
             try { await _ai.DisposeAsync(); } catch (Exception) { }
         }
-        // 準備中（ダウンロード中）は止められないため、片付けを待たずに閉じる
+        // Preparing (downloading) cannot be stopped, so close without waiting for cleanup
 
         _canClose = true;
         Close();

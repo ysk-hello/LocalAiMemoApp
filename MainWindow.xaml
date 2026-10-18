@@ -9,7 +9,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- 左の列：準備・絞り込み・メモ一覧 -->
+        <!-- Left column: prepare, filters, memo list -->
         <Grid Grid.Column="0" RowSpacing="12">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -62,7 +62,7 @@
             </StackPanel>
         </Grid>
 
-        <!-- 右の列：本文・AIの候補・状態表示 -->
+        <!-- Right column: memo text, AI suggestions, status -->
         <Grid Grid.Column="1" RowSpacing="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -92,7 +92,7 @@
                             Style="{ThemeResource AccentButtonStyle}"
                             AutomationProperties.AutomationId="SaveButton"/>
                 </StackPanel>
-                <!-- AIの準備前だけ表示する -->
+                <!-- Shown only before the AI is prepared -->
                 <TextBlock x:Name="AiButtonsNote" x:Uid="AiButtonsNote" TextWrapping="Wrap"
                            Style="{ThemeResource CaptionTextBlockStyle}"
                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"

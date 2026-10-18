@@ -3,8 +3,8 @@ using Microsoft.Windows.ApplicationModel.Resources;
 namespace LocalAiMemoApp;
 
 /// <summary>
-/// AIへのお願い（プロンプト）をまとめた場所。
-/// 文面は Strings/ja-JP/Prompts.resw にあり、コードを変えずに直せる。
+/// The place that holds the requests (prompts) sent to the AI.
+/// The text lives in Strings/en-US/Prompts.resw, so you can edit it without changing the code.
 /// </summary>
 public static class AiPrompts
 {
@@ -15,6 +15,6 @@ public static class AiPrompts
 
     public static string TagsAndCategory => Loader.GetString("TagsAndCategory");
 
-    // タグ・分類の返事のうち「分類:」の行を見分けるための書き出し。
+    // The prefix used to find the "Category:" line in the tag-and-category answer.
     public static string CategoryPrefix => Loader.GetString("CategoryPrefix");
 }

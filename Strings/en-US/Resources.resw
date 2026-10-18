@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AppTitle" xml:space="preserve"><value>Local AI Memo</value></data>
+  <data name="AppTitleText.Text" xml:space="preserve"><value>Local AI Memo</value></data>
+  <data name="NewButton.Content" xml:space="preserve"><value>New memo</value></data>
+  <data name="PrepareButton.Content" xml:space="preserve"><value>Prepare AI</value></data>
+  <data name="PrepareNote.Text" xml:space="preserve"><value>The first time, the app downloads a text model and a speech model. You need an internet connection and a few GB of free space. After that, the saved models are reused.</value></data>
+  <data name="CategoryFilterBox.Header" xml:space="preserve"><value>Filter by category</value></data>
+  <data name="TagFilterBox.Header" xml:space="preserve"><value>Filter by tag</value></data>
+  <data name="TagFilterBox.PlaceholderText" xml:space="preserve"><value>e.g. #estimate</value></data>
+  <data name="ModelFolderButton.Content" xml:space="preserve"><value>Open model folder</value></data>
+  <data name="DataFolderButton.Content" xml:space="preserve"><value>Open memo folder</value></data>
+  <data name="MemoHeading.Text" xml:space="preserve"><value>Memo</value></data>
+  <data name="BodyBox.Header" xml:space="preserve"><value>Memo text</value></data>
+  <data name="BodyBox.PlaceholderText" xml:space="preserve"><value>Type your memo here, or click "Start recording" and speak.</value></data>
+  <data name="SummarizeButton.Content" xml:space="preserve"><value>Summarize</value></data>
+  <data name="TagButton.Content" xml:space="preserve"><value>Suggest tags and category</value></data>
+  <data name="SaveButton.Content" xml:space="preserve"><value>Save</value></data>
+  <data name="SummaryBox.Header" xml:space="preserve"><value>Summary (suggestion)</value></data>
+  <data name="TagsBox.Header" xml:space="preserve"><value>Tags (suggestion)</value></data>
+  <data name="TagsBox.PlaceholderText" xml:space="preserve"><value>#plan #study</value></data>
+  <data name="CategoryBox.Header" xml:space="preserve"><value>Category</value></data>
+  <data name="PrivacyInfo.Title" xml:space="preserve"><value>Processed on this PC</value></data>
+  <data name="PrivacyInfo.Message" xml:space="preserve"><value>AI output is only a suggestion. Check dates, numbers, and names against the original text before you save.</value></data>
+  <data name="Filter_All" xml:space="preserve"><value>All</value></data>
+  <data name="Category_None" xml:space="preserve"><value>Uncategorized</value></data>
+  <data name="Category_Work" xml:space="preserve"><value>Work</value></data>
+  <data name="Category_Personal" xml:space="preserve"><value>Personal</value></data>
+  <data name="Category_Idea" xml:space="preserve"><value>Idea</value></data>
+  <data name="Category_Learning" xml:space="preserve"><value>Learning</value></data>
+  <data name="Record_Start" xml:space="preserve"><value>Start recording</value></data>
+  <data name="Record_Stop" xml:space="preserve"><value>Stop and transcribe</value></data>
+  <data name="Status_Welcome" xml:space="preserve"><value>You can type a memo now. To use AI, click "Prepare AI".</value></data>
+  <data name="Status_Preparing" xml:space="preserve"><value>Preparing... The first time takes a while.</value></data>
+  <data name="Status_Ready" xml:space="preserve"><value>AI is ready.</value></data>
+  <data name="Status_Summarizing" xml:space="preserve"><value>Summarizing...</value></data>
+  <data name="Status_Summarized" xml:space="preserve"><value>Summary suggestion created. Please check it.</value></data>
+  <data name="Status_Tagging" xml:space="preserve"><value>Thinking of tags and a category...</value></data>
+  <data name="Status_Tagged" xml:space="preserve"><value>Tag and category suggestions created. Edit them if needed.</value></data>
+  <data name="Status_Recording" xml:space="preserve"><value>Recording... Click "Stop and transcribe" when you finish speaking.</value></data>
+  <data name="Status_Transcribing" xml:space="preserve"><value>Transcribing...</value></data>
+  <data name="Status_Transcribed" xml:space="preserve"><value>The transcript was added to the end of the memo. Fix any mistakes.</value></data>
+  <data name="Status_Saved" xml:space="preserve"><value>Saved.</value></data>
+  <data name="Status_New" xml:space="preserve"><value>You can type a new memo.</value></data>
+  <data name="Status_Closing" xml:space="preserve"><value>Closing...</value></data>
+  <data name="Error_EmptyBody" xml:space="preserve"><value>The memo is empty. Type a memo first.</value></data>
+  <data name="Error_Microphone" xml:space="preserve"><value>Couldn't use the microphone. Allow microphone access in Windows Settings, or continue by typing.</value></data>
+  <data name="Error_Save" xml:space="preserve"><value>Couldn't save. Please try again.</value></data>
+  <data name="Error_Load" xml:space="preserve"><value>Couldn't load the saved memos.</value></data>
+  <data name="Error_FolderNotFound" xml:space="preserve"><value>The folder doesn't exist yet.</value></data>
+  <data name="Error_TryAgain" xml:space="preserve"><value>Something went wrong. Please try again.</value></data>
+  <data name="Error_Prepare" xml:space="preserve"><value>Couldn't prepare the AI. Check your internet connection and free space, then try again.</value></data>
+  <data name="Error_ModelNotFound" xml:space="preserve"><value>Couldn't find the AI model. Check your internet connection, then try again.</value></data>
+  <data name="Error_EmptyTranscription" xml:space="preserve"><value>Couldn't hear your voice. Speak into the microphone for a few seconds, then try again.</value></data>
+  <data name="Error_EmptyAnswer" xml:space="preserve"><value>The AI didn't return an answer. Please try again.</value></data>
+  <data name="Error_NotReady" xml:space="preserve"><value>Click "Prepare AI" first.</value></data>
+  <data name="Error_BodyTooLong" xml:space="preserve"><value>The memo is too long. Shorten it to 4,000 characters or fewer, then try again.</value></data>
+  <data name="Elapsed_Format" xml:space="preserve"><value>Time: {0:F1} s</value></data>
+  <data name="AiButtonsNote.Text" xml:space="preserve"><value>"Start recording", "Summarize", and "Suggest tags and category" become available after you click "Prepare AI" at the top left. You can type and save memos without preparing the AI.</value></data>
+</root>

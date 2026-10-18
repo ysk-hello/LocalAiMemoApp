@@ -3,7 +3,7 @@ using Microsoft.Windows.ApplicationModel.Resources;
 namespace LocalAiMemoApp;
 
 /// <summary>
-/// メモの分類。保存するのは英語のキー、画面に出すのは .resw の表示名。
+/// Memo categories. The key is saved to the file; the display name comes from the .resw file.
 /// </summary>
 public static class Categories
 {
@@ -14,7 +14,8 @@ public static class Categories
 
     public static string DisplayName(string key) => Loader.GetString($"Category_{key}");
 
-    // 表示名（例：「仕事」）からキーを探す。見つからなければ「未分類」。
+    // Finds the key for a display name (e.g. "Work"), ignoring case. Falls back to "Uncategorized".
     public static string FromDisplayName(string? name) =>
-        All.FirstOrDefault(key => DisplayName(key) == name?.Trim()) ?? None;
+        All.FirstOrDefault(key => string.Equals(
+            DisplayName(key), name?.Trim(), StringComparison.OrdinalIgnoreCase)) ?? None;
 }
